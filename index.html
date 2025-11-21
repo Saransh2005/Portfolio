@@ -1,587 +1,633 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saransh | CS Engineer, UI/UX, Android Dev</title>
-    <!-- Load Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <style>
-        /* Custom font loading (Assuming Satoshi and Inter are available via custom load or fallback) */
-        /* For this demonstration, we'll use a local fallback to maintain consistency with the prompt */
-        :root {
-            --font-heading: 'Poppins', 'Satoshi', 'Inter', sans-serif;
-            --font-body: 'DM Sans', 'Inter', sans-serif;
-            --color-accent: #C8A87A;
-            --color-text: #1A1A1A;
-            --color-subtle-gray: #F0F0F0;
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Saransh | CS Engineer • Android Dev • UI/UX</title>
 
-        body {
-            font-family: var(--font-body);
-            color: var(--color-text);
-            background-color: #FFFFFF; /* Pure White background */
-        }
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-        .heading-font {
-            font-family: var(--font-heading);
-            letter-spacing: -0.04em;
-        }
+  <!-- AOS (Animate On Scroll) -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
 
-        /* Subtle Neumorphism-lite card shadow */
-        .premium-card-shadow {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
 
-        .premium-card-shadow:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06), 0 3px 6px rgba(0, 0, 0, 0.04);
-        }
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest" defer></script>
 
-        /* Accent color utility */
-        .accent-bg { background-color: var(--color-accent); }
-        .accent-text { color: var(--color-accent); }
-        .accent-border { border-color: var(--color-accent); }
+  <style>
+    :root{
+      --font-heading: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      --font-body: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto;
+      --accent: #C8A87A;
+      --text: #111827;
+      --muted: #6B7280;
+      --glass: rgba(255,255,255,0.6);
+    }
+    body{ font-family: var(--font-body); color:var(--text); background: #fff; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
+    .heading{ font-family:var(--font-heading); letter-spacing:-0.02em; }
+    /* premium card */
+    .premium-card-shadow{ box-shadow: 0 6px 20px rgba(16,24,40,0.06); transition: transform .35s cubic-bezier(.2,.9,.2,1), box-shadow .35s; }
+    .premium-card-shadow:hover{ transform: translateY(-8px); box-shadow: 0 18px 36px rgba(16,24,40,0.12); }
 
-        /* Timeline style */
-        .timeline-container {
-            position: relative;
-        }
+    /* hero parallax layers */
+    .hero-layer { transform-style: preserve-3d; will-change: transform; }
 
-        .timeline-line {
-            position: absolute;
-            left: 50%;
-            width: 2px;
-            background-color: var(--color-subtle-gray);
-            top: 0;
-            bottom: 0;
-            transform: translateX(-50%);
-        }
+    /* modal visible */
+    .modal-open{ overflow:hidden; }
 
-        @media (max-width: 768px) {
-            .timeline-line {
-                left: 20px;
-                transform: none;
-            }
-            .timeline-item-left, .timeline-item-right {
-                margin-left: 40px;
-                width: calc(100% - 40px);
-            }
-        }
-    </style>
+    /* small helpers */
+    .accent-text{ color:var(--accent); }
+    .accent-bg{ background:linear-gradient(90deg, rgba(200,168,122,0.12), rgba(200,168,122,0.18)); border:1px solid rgba(200,168,122,0.2); }
+    /* text mask for reveal */
+    .mask-clip { overflow:hidden; display:inline-block; vertical-align:middle; }
+    .mask-clip span { display:inline-block; transform: translateY(100%); }
+    /* timeline */
+    .timeline-line { width:2px; background:#F3F4F6; left:50%; transform:translateX(-50%); top:0; bottom:0; position:absolute; }
+    @media (max-width:768px){ .timeline-line{ left:24px; transform:none; } .timeline-item-right, .timeline-item-left{ margin-left:48px; } }
+    /* A little tilt for mouse move */ 
+    .tilt { transform: perspective(600px); transition: transform .15s ease-out; }
+    /* focus */
+    input:focus, textarea:focus { outline: none; box-shadow: 0 0 0 4px rgba(200,168,122,0.08); border-color: rgba(200,168,122,0.4) }
+  </style>
 </head>
 
-<body>
-    <!-- Navigation Bar (Sticky, Hidden until scroll) -->
-    <header id="navbar" class="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md opacity-0 transition-opacity duration-500 shadow-sm border-b border-gray-100 hidden md:block">
-        <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <span class="heading-font text-lg font-bold accent-text">SARANSH</span>
-            <div class="flex space-x-8 text-sm font-medium">
-                <a href="#home" class="hover:text-amber-700 transition duration-200">House</a>
-                <a href="#about" class="hover:text-amber-700 transition duration-200">About</a>
-                <a href="#skills" class="hover:text-amber-700 transition duration-200">Skills</a>
-                <a href="#projects" class="hover:text-amber-700 transition duration-200">Projects</a>
-                <a href="#contact" class="hover:text-amber-700 transition duration-200">Contact</a>
-            </div>
-        </nav>
-    </header>
+<body class="antialiased bg-white">
 
-    <!-- Main Content Container -->
-    <main class="text-lg">
-        
-        <!-- 1. HERO SECTION -->
-        <section id="home" class="h-screen flex items-center justify-center p-6 md:p-12 text-center max-w-5xl mx-auto">
-            <div class="space-y-8">
-                <!-- Profile Image Placeholder -->
-                <div class="w-32 h-32 mx-auto rounded-full p-1" style="border: 4px solid var(--color-accent); background: linear-gradient(135deg, var(--color-subtle-gray), var(--color-accent) 80%);">
-                    <img src="https://placehold.co/120x120/F5F5F5/C8A87A?text=S" alt="Saransh Profile" class="w-full h-full object-cover rounded-full">
-                </div>
+  <!-- NAVBAR -->
+  <header id="navbar" class="fixed w-full z-50 transition-all duration-400">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="#home" class="heading text-lg font-bold accent-text">SARANSH</a>
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-700">
+        <a href="#home" class="hover:text-amber-700">Home</a>
+        <a href="#about" class="hover:text-amber-700">About</a>
+        <a href="#projects" class="hover:text-amber-700">Projects</a>
+        <a href="#experience" class="hover:text-amber-700">Experience</a>
+        <a href="#contact" class="hover:text-amber-700">Contact</a>
+      </nav>
 
-                <h1 class="heading-font text-5xl md:text-7xl font-extrabold text-gray-900 leading-tight">
-                    Hello, I'm <span class="accent-text">SARANSH</span>.
-                </h1>
-
-                <p class="text-xl md:text-2xl font-light text-slate-600 max-w-3xl mx-auto">
-                    CS Engineer | Android Dev | UI/UX | Data Science Enthusiast
-                </p>
-
-                <p class="text-base md:text-lg text-gray-700 max-w-4xl mx-auto">
-                    A problem-solving B.Tech student building clean user interfaces and efficient systems through code and design thinking.
-                </p>
-
-                <div class="flex justify-center space-x-6 pt-4">
-                    <a href="#projects" class="py-3 px-8 text-white font-semibold rounded-2xl accent-bg premium-card-shadow hover:opacity-90 transition duration-300 flex items-center space-x-2">
-                        <span>View Projects</span>
-                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
-                    </a>
-                    <a href="#" class="py-3 px-8 text-gray-700 font-semibold rounded-2xl border-2 accent-border bg-white hover:bg-gray-50 transition duration-300 premium-card-shadow flex items-center space-x-2">
-                        <span>Download Resume</span>
-                        <i data-lucide="download" class="w-5 h-5"></i>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <div class="max-w-7xl mx-auto px-6 md:px-12">
-
-            <!-- Section Divider -->
-            <div class="w-full h-px my-24 bg-gray-100"></div>
-
-            <!-- 2. ABOUT ME SECTION -->
-            <section id="about" class="py-16 md:py-24">
-                <h2 class="heading-font text-3xl md:text-5xl font-bold mb-16">
-                    <span class="text-slate-200 mr-4">01.</span> About Me
-                </h2>
-                
-                <div class="grid md:grid-cols-2 gap-16 items-center">
-                    <div class="space-y-6 text-gray-700">
-                        <p>
-                            I am Saransh, currently pursuing a B.Tech in Computer Science Engineering. My passion lies at the intersection of creation and efficiency, blending a deep love for clean code with elegant user experience (UI/UX). I thrive on turning complex problems into simple, functional solutions.
-                        </p>
-                        <p>
-                            While I focus academically on **Data Science and AI/ML**, I actively develop cross-platform solutions, primarily in **Android (Kotlin)**, and obsess over design tools like **Figma**. I am a **fast-learner** and value **responsibility** and **teamwork** highly.
-                        </p>
-                        <div class="p-6 rounded-2xl bg-slate-50 border border-gray-100">
-                            <h3 class="font-semibold text-xl mb-3 flex items-center accent-text">
-                                <i data-lucide="heart" class="w-5 h-5 mr-2 fill-current"></i> NGO Work
-                            </h3>
-                            <p class="text-base">
-                                Organizer at **Pehchaan – The Street School**, where I conduct drawing, tutoring, and mental health activities for children in Delhi. A core belief in using skills for social good.
-                            </p>
-                        </div>
-                    </div>
-                    <div class="p-8 rounded-3xl bg-slate-50 premium-card-shadow">
-                        <h3 class="heading-font text-2xl font-bold mb-4">My Focus Areas</h3>
-                        <ul class="space-y-3 list-none text-gray-700">
-                            <li class="flex items-center"><i data-lucide="smartphone" class="w-5 h-5 mr-3 accent-text"></i> Android Development (Kotlin)</li>
-                            <li class="flex items-center"><i data-lucide="palette" class="w-5 h-5 mr-3 accent-text"></i> UI/UX Design & Figma</li>
-                            <li class="flex items-center"><i data-lucide="bar-chart-3" class="w-5 h-5 mr-3 accent-text"></i> Data Science & AI/ML Learning</li>
-                            <li class="flex items-center"><i data-lucide="git-branch" class="w-5 h-5 mr-3 accent-text"></i> Web Development (Foundations)</li>
-                        </ul>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- Section Divider -->
-            <div class="w-full h-px my-24 bg-gray-100"></div>
-
-            <!-- 3. SKILLS SECTION -->
-            <section id="skills" class="py-16 md:py-24">
-                <h2 class="heading-font text-3xl md:text-5xl font-bold mb-16">
-                    <span class="text-slate-200 mr-4">02.</span> Skills & Tech Stack
-                </h2>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    
-                    <!-- Languages -->
-                    <div class="p-8 rounded-2xl bg-white border border-gray-100 premium-card-shadow">
-                        <i data-lucide="code-square" class="w-8 h-8 accent-text mb-4"></i>
-                        <h3 class="heading-font text-xl font-bold mb-4">Languages</h3>
-                        <p class="text-base text-gray-600">C, C++, Java, Python, JavaScript, Kotlin, XML</p>
-                    </div>
-
-                    <!-- Frameworks / Libraries -->
-                    <div class="p-8 rounded-2xl bg-white border border-gray-100 premium-card-shadow">
-                        <i data-lucide="layers-3" class="w-8 h-8 accent-text mb-4"></i>
-                        <h3 class="heading-font text-xl font-bold mb-4">Frameworks / Libraries</h3>
-                        <p class="text-base text-gray-600">HTML, CSS, MPAndroidChart (Android)</p>
-                    </div>
-
-                    <!-- Tools / Platforms -->
-                    <div class="p-8 rounded-2xl bg-white border border-gray-100 premium-card-shadow">
-                        <i data-lucide="tool" class="w-8 h-8 accent-text mb-4"></i>
-                        <h3 class="heading-font text-xl font-bold mb-4">Tools / Platforms</h3>
-                        <p class="text-base text-gray-600">Figma (UI/UX), MySQL, DBMS, Android Studio, Supabase, Git/GitHub</p>
-                    </div>
-
-                    <!-- Soft Skills -->
-                    <div class="p-8 rounded-2xl bg-white border border-gray-100 premium-card-shadow">
-                        <i data-lucide="users-2" class="w-8 h-8 accent-text mb-4"></i>
-                        <h3 class="heading-font text-xl font-bold mb-4">Soft Skills</h3>
-                        <p class="text-base text-gray-600">Problem-Solving, Teamwork, Communication, UI/UX Thinking</p>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- Section Divider -->
-            <div class="w-full h-px my-24 bg-gray-100"></div>
-
-            <!-- 4. PROJECTS SECTION -->
-            <section id="projects" class="py-16 md:py-24">
-                <h2 class="heading-font text-3xl md:text-5xl font-bold mb-16">
-                    <span class="text-slate-200 mr-4">03.</span> Featured Projects
-                </h2>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                    
-                    <!-- Project Card 1: StudyBuddy -->
-                    <div class="rounded-2xl bg-white premium-card-shadow overflow-hidden group cursor-pointer" onclick="openModal('StudyBuddy')">
-                        <div class="aspect-video overflow-hidden">
-                            <img src="https://placehold.co/600x400/1E40AF/FFFFFF?text=StudyBuddy+App" alt="StudyBuddy App Mockup" class="w-full h-full object-cover transform transition duration-500 group-hover:scale-105">
-                        </div>
-                        <div class="p-6">
-                            <h3 class="heading-font text-2xl font-bold mb-1">StudyBuddy – Android App</h3>
-                            <p class="text-sm accent-text font-medium mb-3">Kotlin, XML, Supabase, MPAndroidChart</p>
-                            <p class="text-base text-gray-600">A robust task management and study tracker app with rich features like Pomodoro, authentication, and analytics dashboard.</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Project Card 2: Brew Haven -->
-                    <div class="rounded-2xl bg-white premium-card-shadow overflow-hidden group cursor-pointer" onclick="openModal('BrewHaven')">
-                        <div class="aspect-video overflow-hidden">
-                            <img src="https://placehold.co/600x400/92400E/FFFFFF?text=Brew+Haven+Website" alt="Brew Haven Website Mockup" class="w-full h-full object-cover transform transition duration-500 group-hover:scale-105">
-                        </div>
-                        <div class="p-6">
-                            <h3 class="heading-font text-2xl font-bold mb-1">Brew Haven – Coffee Café</h3>
-                            <p class="text-sm accent-text font-medium mb-3">HTML, CSS, JavaScript</p>
-                            <p class="text-base text-gray-600">Modern, 2-page website with smooth UI/UX and a simple built-in chatbot for customer interaction.</p>
-                        </div>
-                    </div>
-                    
-                    <!-- Project Card 3: ADAS Model -->
-                    <div class="rounded-2xl bg-white premium-card-shadow overflow-hidden group cursor-pointer" onclick="openModal('ADAS')">
-                        <div class="aspect-video overflow-hidden">
-                            <img src="https://placehold.co/600x400/15803D/FFFFFF?text=ADAS+Data+Viz" alt="ADAS Data Visualization Mockup" class="w-full h-full object-cover transform transition duration-500 group-hover:scale-105">
-                        </div>
-                        <div class="p-6">
-                            <h3 class="heading-font text-2xl font-bold mb-1">ADAS Data Visualization</h3>
-                            <p class="text-sm accent-text font-medium mb-3">Data Visualization Techniques</p>
-                            <p class="text-base text-gray-600">A proof-of-concept project demonstrating the workflow of an ADAS system using tree detection and visualization.</p>
-                        </div>
-                    </div>
-
-                    <!-- Project Card 4: AI Chatbots Group -->
-                    <div class="rounded-2xl bg-white premium-card-shadow overflow-hidden group cursor-pointer" onclick="openModal('Chatbots')">
-                        <div class="aspect-video overflow-hidden">
-                            <img src="https://placehold.co/600x400/7C3AED/FFFFFF?text=AI+Chatbot+Projects" alt="AI Chatbot Projects Mockup" class="w-full h-full object-cover transform transition duration-500 group-hover:scale-105">
-                        </div>
-                        <div class="p-6">
-                            <h3 class="heading-font text-2xl font-bold mb-1">AI Chatbots (Multiple)</h3>
-                            <p class="text-sm accent-text font-medium mb-3">Flask, Gemini API, Flutter, Python GUI</p>
-                            <p class="text-base text-gray-600">Implementation of intelligent chatbots across multiple platforms (Web, Android, Windows) using the Gemini API.</p>
-                        </div>
-                    </div>
-
-                     <!-- Project Card 5: ML Mini Projects -->
-                    <div class="rounded-2xl bg-white premium-card-shadow overflow-hidden group cursor-pointer" onclick="openModal('ML')">
-                        <div class="aspect-video overflow-hidden">
-                            <img src="https://placehold.co/600x400/DC2626/FFFFFF?text=ML+Mini+Projects" alt="ML Mini Projects Mockup" class="w-full h-full object-cover transform transition duration-500 group-hover:scale-105">
-                        </div>
-                        <div class="p-6">
-                            <h3 class="heading-font text-2xl font-bold mb-1">Machine Learning Projects</h3>
-                            <p class="text-sm accent-text font-medium mb-3">Python, Scikit-learn, Pandas</p>
-                            <p class="text-base text-gray-600">A collection of foundational ML projects, including Regression (Housing) and Classification (Wine, Cancer).</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Section Divider -->
-            <div class="w-full h-px my-24 bg-gray-100"></div>
-
-            <!-- 5. EXPERIENCE & EDUCATION SECTION -->
-            <section id="experience" class="py-16 md:py-24">
-                <h2 class="heading-font text-3xl md:text-5xl font-bold mb-16">
-                    <span class="text-slate-200 mr-4">04.</span> Experience & Education
-                </h2>
-
-                <div class="timeline-container relative pt-12">
-                    <div class="timeline-line hidden md:block"></div>
-
-                    <!-- Experience 1: Android Internship -->
-                    <div class="grid md:grid-cols-2 gap-8 mb-16 relative">
-                        <div class="md:col-span-1 timeline-item-left md:pr-12 md:text-right">
-                            <div class="p-6 rounded-2xl bg-slate-50 premium-card-shadow">
-                                <span class="text-sm font-semibold mb-2 block accent-text">Q3 2023 - Present</span>
-                                <h3 class="heading-font text-2xl font-bold mb-2 text-gray-900">Android Development Intern</h3>
-                                <p class="text-base text-gray-600 mb-3">Industry-Oriented Training Program</p>
-                                <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
-                                    <li>Built production-ready apps using Kotlin, MVVM, and XML.</li>
-                                    <li>Integrated Supabase for Auth, DB, and File Storage.</li>
-                                    <li>Implemented MPAndroidChart for data analytics dashboards.</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="hidden md:block absolute w-4 h-4 rounded-full accent-bg top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
-                        <div class="md:col-span-1"></div>
-                    </div>
-                    
-                    <!-- Experience 2: NGO -->
-                    <div class="grid md:grid-cols-2 gap-8 mb-16 relative">
-                        <div class="hidden md:block"></div>
-                        <div class="md:col-span-1 timeline-item-right md:pl-12 md:text-left">
-                            <div class="p-6 rounded-2xl bg-slate-50 premium-card-shadow">
-                                <span class="text-sm font-semibold mb-2 block accent-text">2022 - Present</span>
-                                <h3 class="heading-font text-2xl font-bold mb-2 text-gray-900">Organizer – Pehchaan NGO</h3>
-                                <p class="text-base text-gray-600 mb-3">Pehchaan – The Street School</p>
-                                <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
-                                    <li>Conducted free drawing classes, academic tutoring, and psychology/mental health sessions.</li>
-                                    <li>Organized educational events and activities for underprivileged children in Delhi.</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="hidden md:block absolute w-4 h-4 rounded-full accent-bg top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
-                    </div>
-                    
-                    <!-- Education -->
-                    <div class="grid md:grid-cols-2 gap-8 relative">
-                        <div class="md:col-span-1 timeline-item-left md:pr-12 md:text-right">
-                            <div class="p-6 rounded-2xl bg-white border-2 accent-border">
-                                <span class="text-sm font-semibold mb-2 block accent-text">2021 - Ongoing</span>
-                                <h3 class="heading-font text-2xl font-bold mb-2 text-gray-900">B.Tech – Computer Science Engineering (CSE)</h3>
-                                <p class="text-base text-gray-600">3rd Year, Specialization/Minor in Data Science</p>
-                            </div>
-                        </div>
-                        <div class="hidden md:block absolute w-4 h-4 rounded-full accent-bg top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
-                        <div class="md:col-span-1"></div>
-                    </div>
-
-                </div>
-            </section>
-            
-            <!-- Section Divider -->
-            <div class="w-full h-px my-24 bg-gray-100"></div>
-            
-            <!-- 6. CERTIFICATIONS SECTION -->
-            <section id="certifications" class="py-16 md:py-24">
-                <h2 class="heading-font text-3xl md:text-5xl font-bold mb-16">
-                    <span class="text-slate-200 mr-4">05.</span> Certifications
-                </h2>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    
-                    <!-- Cert Card 1: Android Dev -->
-                    <div class="p-6 rounded-2xl bg-white premium-card-shadow flex items-start space-x-4">
-                        <i data-lucide="shield-check" class="w-8 h-8 accent-text flex-shrink-0"></i>
-                        <div>
-                            <h3 class="heading-font text-lg font-bold">Android Development Course</h3>
-                            <p class="text-sm text-gray-600">Comprehensive training in modern Android stack (Kotlin, MVVM).</p>
-                        </div>
-                    </div>
-
-                    <!-- Cert Card 2: NGO Internship -->
-                    <div class="p-6 rounded-2xl bg-white premium-card-shadow flex items-start space-x-4">
-                        <i data-lucide="graduation-cap" class="w-8 h-8 accent-text flex-shrink-0"></i>
-                        <div>
-                            <h3 class="heading-font text-lg font-bold">NGO Internship Completion</h3>
-                            <p class="text-sm text-gray-600">Sanatan Pratibha Foundation - Focused on community welfare and soft skills.</p>
-                        </div>
-                    </div>
-
-                    <!-- Cert Card 3: Data Science -->
-                    <div class="p-6 rounded-2xl bg-white premium-card-shadow flex items-start space-x-4">
-                        <i data-lucide="brain-circuit" class="w-8 h-8 accent-text flex-shrink-0"></i>
-                        <div>
-                            <h3 class="heading-font text-lg font-bold">Data Science & AI Certification</h3>
-                            <p class="text-sm text-gray-600">Foundational knowledge in ML/AI concepts and Python libraries.</p>
-                        </div>
-                    </div>
-
-                    <!-- Cert Card 4: UI/UX Workshop -->
-                    <div class="p-6 rounded-2xl bg-white premium-card-shadow flex items-start space-x-4">
-                        <i data-lucide="layout-grid" class="w-8 h-8 accent-text flex-shrink-0"></i>
-                        <div>
-                            <h3 class="heading-font text-lg font-bold">UI/UX Design Workshop</h3>
-                            <p class="text-sm text-gray-600">Focused training on Figma best practices and design principles.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- Section Divider -->
-            <div class="w-full h-px my-24 bg-gray-100"></div>
-
-            <!-- 7. CONTACT SECTION -->
-            <section id="contact" class="py-16 md:py-24 max-w-3xl mx-auto">
-                <h2 class="heading-font text-3xl md:text-5xl font-bold mb-16 text-center">
-                    <span class="text-slate-200 mr-4">06.</span> Get In Touch
-                </h2>
-
-                <p class="text-center text-lg text-gray-700 mb-10">
-                    I am always open to new opportunities, collaborations, and conversations about tech, design, or social work.
-                </p>
-
-                <form class="space-y-6 p-8 rounded-3xl bg-slate-50 premium-card-shadow">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <input type="text" placeholder="Your Name" class="w-full p-4 border border-gray-200 rounded-xl bg-white focus:ring-2 accent-border focus:border-accent-text transition duration-300">
-                        <input type="email" placeholder="Your Email" class="w-full p-4 border border-gray-200 rounded-xl bg-white focus:ring-2 accent-border focus:border-accent-text transition duration-300">
-                    </div>
-                    <input type="text" placeholder="Subject" class="w-full p-4 border border-gray-200 rounded-xl bg-white focus:ring-2 accent-border focus:border-accent-text transition duration-300">
-                    <textarea placeholder="Your Message" rows="5" class="w-full p-4 border border-gray-200 rounded-xl bg-white focus:ring-2 accent-border focus:border-accent-text transition duration-300"></textarea>
-                    
-                    <button type="submit" class="w-full py-4 text-white font-semibold rounded-xl accent-bg premium-card-shadow hover:opacity-90 transition duration-300 flex items-center justify-center space-x-2">
-                        <span>Send Message</span>
-                        <i data-lucide="mail" class="w-5 h-5"></i>
-                    </button>
-                </form>
-
-                <!-- Social Links -->
-                <div class="flex justify-center space-x-8 mt-12">
-                    <a href="https://github.com/saransh" target="_blank" class="text-gray-500 hover:text-gray-900 transition duration-300" aria-label="GitHub">
-                        <i data-lucide="github" class="w-8 h-8"></i>
-                    </a>
-                    <a href="https://linkedin.com/in/saransh" target="_blank" class="text-gray-500 hover:text-blue-700 transition duration-300" aria-label="LinkedIn">
-                        <i data-lucide="linkedin" class="w-8 h-8"></i>
-                    </a>
-                    <a href="mailto:saransh.cs@email.com" class="text-gray-500 hover:accent-text transition duration-300" aria-label="Email">
-                        <i data-lucide="mail" class="w-8 h-8"></i>
-                    </a>
-                </div>
-
-            </section>
-        </div>
-
-    </main>
-
-    <!-- Footer -->
-    <footer class="text-center py-10 border-t border-gray-100 mt-20">
-        <p class="text-sm text-gray-500">
-            Designed & Built by Saransh | &copy; 2024.
-        </p>
-    </footer>
-
-    <!-- Project Modal Placeholder (Hidden by default) -->
-    <div id="project-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="bg-white rounded-3xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-300">
-            <div class="flex justify-end">
-                <button onclick="closeModal()" class="text-gray-600 hover:text-gray-900">
-                    <i data-lucide="x" class="w-6 h-6"></i>
-                </button>
-            </div>
-            <h3 id="modal-title" class="heading-font text-3xl font-bold mt-4 mb-4 accent-text">Project Title</h3>
-            <p id="modal-tech" class="text-sm font-medium mb-4 text-gray-500"></p>
-            <p id="modal-description" class="text-base text-gray-700 mb-6"></p>
-
-            <h4 class="font-semibold text-xl mb-3 border-b pb-1">Features/Details</h4>
-            <ul id="modal-features" class="list-disc list-inside text-gray-600 space-y-2 text-sm pl-4">
-                <!-- Features will be populated here -->
-            </ul>
-        </div>
+      <div class="md:hidden">
+        <button id="menu-btn" aria-expanded="false" class="p-2 rounded-md border border-gray-100 bg-white shadow-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
     </div>
+  </header>
 
+  <!-- MOBILE MENU -->
+  <div id="mobile-menu" class="fixed inset-0 bg-black/40 z-40 hidden">
+    <div class="absolute right-4 top-4 bg-white rounded-xl p-6 w-64 premium-card-shadow">
+      <div class="flex flex-col space-y-4">
+        <a href="#home" class="text-gray-700 font-medium">Home</a>
+        <a href="#about" class="text-gray-700 font-medium">About</a>
+        <a href="#projects" class="text-gray-700 font-medium">Projects</a>
+        <a href="#experience" class="text-gray-700 font-medium">Experience</a>
+        <a href="#contact" class="text-gray-700 font-medium">Contact</a>
+        <a href="#" class="mt-2 inline-block py-2 text-sm text-white font-semibold rounded-xl w-full text-center" style="background:var(--accent)">Resume</a>
+      </div>
+    </div>
+  </div>
 
-    <script>
-        // Initialize Lucide Icons
-        lucide.createIcons();
+  <main class="pt-20">
+    <!-- HERO -->
+    <section id="home" class="relative min-h-[88vh] flex items-center">
+      <div class="max-w-6xl mx-auto px-6 lg:px-12 w-full grid lg:grid-cols-2 gap-12 items-center">
+        <!-- Left: content -->
+        <div class="space-y-6">
+          <div class="text-sm uppercase tracking-wide text-gray-500" data-aos="fade-right" data-aos-delay="100">Hi, my name is</div>
 
-        // ----------------------------------------------------
-        // JAVASCRIPT FOR UI INTERACTIVITY
-        // ----------------------------------------------------
+          <h1 class="heading text-5xl md:text-6xl font-extrabold leading-tight" aria-label="Hello I'm Saransh">
+            <div class="mask-clip" style="display:block;">
+              <span class="block" id="hero-line1">Hello, I'm </span>
+            </div>
+            <div class="mask-clip">
+              <span class="block accent-text text-5xl md:text-6xl heading" id="hero-name">SARANSH.</span>
+            </div>
+          </h1>
 
-        // 1. Sticky Navigation Bar Logic
-        window.onscroll = function() {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 100) {
-                navbar.classList.remove('opacity-0', 'hidden');
-                navbar.classList.add('opacity-100');
-            } else {
-                navbar.classList.remove('opacity-100');
-                navbar.classList.add('opacity-0', 'hidden');
-            }
-        };
+          <p class="text-lg text-gray-700 max-w-xl" data-aos="fade-up" data-aos-delay="300">
+            CS Engineer • Android Developer • UI/UX Designer • Data Science Enthusiast. I craft clean interfaces and efficient systems — bridging product design and code.
+          </p>
 
+          <div class="flex items-center space-x-4 mt-4">
+            <a href="#projects" class="inline-flex items-center gap-3 px-6 py-3 rounded-2xl text-white font-semibold" style="background:var(--accent); box-shadow: 0 8px 30px rgba(200,168,122,0.12);" data-aos="zoom-in" data-aos-delay="400">
+              View Projects
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </a>
 
-        // 2. Project Data
-        const projectData = {
-            StudyBuddy: {
-                title: 'StudyBuddy – Android App',
-                tech: 'Kotlin, XML, Supabase, MPAndroidChart',
-                description: 'A complete mobile application designed for students, focusing on personalized task management and productivity tracking.',
-                features: [
-                    'Secure Login/Signup (Email, Google, GitHub) using Supabase Auth.',
-                    'Personalized user profiles and settings.',
-                    'Task management with local notifications.',
-                    'Integrated Pomodoro timer for focused study sessions.',
-                    'Analytics dashboard visualizing study time and task completion with MPAndroidChart.',
-                    'Voice note recording and PDF upload functionality.',
-                    'Modern UI with fluid animations following Material Design principles.',
-                ]
-            },
-            BrewHaven: {
-                title: 'Brew Haven – Coffee Café Website',
-                tech: 'HTML, CSS, JavaScript',
-                description: 'A two-page marketing website for a premium coffee shop, prioritizing sleek UI/UX and user interaction.',
-                features: [
-                    'Two distinct pages: Home and Contact.',
-                    'Modern, custom-designed UI/UX with elegant typography and neutral palette.',
-                    'Smooth navigation and scroll interactions.',
-                    'Built-in JavaScript-based chatbot for quick customer inquiries.',
-                ]
-            },
-            ADAS: {
-                title: 'Non-working ADAS Model (Data Visualization)',
-                tech: 'Data Visualization Techniques, Python (Concept)',
-                description: 'A theoretical proof-of-concept project focusing on the data flow and visualization necessary for an Advanced Driver-Assistance System (ADAS).',
-                features: [
-                    'Demonstrates tree detection concept without complex deep learning.',
-                    'Visualizes raw sensor data (simulated) and processed output.',
-                    'Focuses on data pipeline and rendering for quick diagnostic checks.',
-                ]
-            },
-            Chatbots: {
-                title: 'AI Chatbots (Multiple Projects)',
-                tech: 'Flask, Gemini API, Flutter, Python GUI',
-                description: 'A diverse portfolio of projects showcasing integration of the Gemini API for conversational AI across various platforms.',
-                features: [
-                    'Hair Salon Website Chatbot (Python/Flask backend + Gemini API).',
-                    'Android Chatbot App (Flutter frontend + Flask backend).',
-                    'Windows App Chatbot (Simple Python GUI and Flask backend).',
-                    'Focus on robust API handling and quick response times.',
-                ]
-            },
-            ML: {
-                title: 'Machine Learning Mini Projects',
-                tech: 'Python, Scikit-learn, Pandas, NumPy',
-                description: 'A foundation building collection of standard machine learning exercises and models.',
-                features: [
-                    'California Housing Regression: Predicting housing prices using linear and non-linear models.',
-                    'Wine Quality Classification: Classifying wine quality based on physico-chemical features.',
-                    'Lung Cancer Classification: Using Logistic Regression and K-Nearest Neighbors (KNN).',
-                    'Emphasis on data preprocessing, model selection, and evaluation metrics.',
-                ]
-            }
-        };
+            <a href="#" class="inline-flex items-center gap-3 px-5 py-3 rounded-2xl border border-gray-200 text-gray-800 font-medium backdrop-blur-sm accent-bg" data-aos="zoom-in" data-aos-delay="450">
+              Download Resume
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v14M19 12l-7 7-7-7"/>
+              </svg>
+            </a>
+          </div>
 
-        // 3. Modal Functions
-        function openModal(projectId) {
-            const data = projectData[projectId];
-            if (!data) return;
+          <!-- counters -->
+          <div class="mt-8 grid grid-cols-3 gap-6 max-w-xs" data-aos="fade-up" data-aos-delay="500">
+            <div class="p-4 bg-white rounded-2xl premium-card-shadow text-center">
+              <div class="text-2xl font-bold heading" data-counter="120">0</div>
+              <div class="text-xs text-gray-500">Projects</div>
+            </div>
+            <div class="p-4 bg-white rounded-2xl premium-card-shadow text-center">
+              <div class="text-2xl font-bold heading" data-counter="3">0</div>
+              <div class="text-xs text-gray-500">Years Experience</div>
+            </div>
+            <div class="p-4 bg-white rounded-2xl premium-card-shadow text-center">
+              <div class="text-2xl font-bold heading" data-counter="10">0</div>
+              <div class="text-xs text-gray-500">Certifications</div>
+            </div>
+          </div>
+        </div>
 
-            document.getElementById('modal-title').textContent = data.title;
-            document.getElementById('modal-tech').textContent = data.tech;
-            document.getElementById('modal-description').textContent = data.description;
-            
-            const featuresList = document.getElementById('modal-features');
-            featuresList.innerHTML = '';
-            data.features.forEach(feature => {
-                const li = document.createElement('li');
-                li.textContent = feature;
-                featuresList.appendChild(li);
-            });
+        <!-- Right: image & floating cards -->
+        <div class="relative flex items-center justify-center">
+          <div id="hero-card" class="relative w-[340px] h-[420px] rounded-3xl overflow-hidden premium-card-shadow tilt hero-layer" data-tilt>
+            <div class="absolute inset-0 bg-gradient-to-br from-white to-[#FFF8F0] p-6">
+              <div class="w-28 h-28 rounded-full mx-auto border-4" style="border-color:var(--accent); background:linear-gradient(135deg,#F8F3EE,#f9f7f2);">
+                <img src="https://placehold.co/160x160/F5F5F5/C8A87A?text=S" alt="Saransh" class="w-full h-full object-cover rounded-full">
+              </div>
 
-            const modal = document.getElementById('project-modal');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            modal.querySelector('div').classList.remove('scale-95');
-            document.body.style.overflow = 'hidden'; // Prevent background scrolling
-        }
+              <div class="text-center mt-6">
+                <div class="heading text-xl font-bold">Saransh</div>
+                <div class="text-sm text-gray-500">B.Tech CSE • Android & UI/UX</div>
+              </div>
 
-        function closeModal() {
-            const modal = document.getElementById('project-modal');
-            modal.classList.add('opacity-0', 'pointer-events-none');
-            modal.querySelector('div').classList.add('scale-95');
-            document.body.style.overflow = ''; // Restore background scrolling
-        }
+              <div class="mt-6 space-y-3">
+                <div class="p-3 rounded-xl bg-white/70 border border-gray-100 flex items-center justify-between">
+                  <div>
+                    <div class="text-xs text-gray-500">Top Skill</div>
+                    <div class="text-sm font-medium">Kotlin • Android</div>
+                  </div>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"/></svg>
+                </div>
+                <div class="p-3 rounded-xl bg-white/70 border border-gray-100 flex items-center justify-between">
+                  <div>
+                    <div class="text-xs text-gray-500">Focus</div>
+                    <div class="text-sm font-medium">UI/UX • Data</div>
+                  </div>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c1.657 0 3-1.567 3-3.5S13.657 1 12 1 9 2.567 9 4.5 10.343 8 12 8zM19 23c0-5-4-9-7-9s-7 4-7 9"/></svg>
+                </div>
+              </div>
+            </div>
+            <!-- animate small floating badges -->
+            <div class="absolute -left-8 -top-8">
+              <div class="p-3 bg-white rounded-xl premium-card-shadow transform rotate-6" data-aos="zoom-in" data-aos-delay="200">Android</div>
+            </div>
+            <div class="absolute -right-8 -bottom-10">
+              <div class="p-3 bg-white rounded-xl premium-card-shadow transform -rotate-6" data-aos="zoom-in" data-aos-delay="300">UI/UX</div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        // Close modal when clicking outside the content box
-        document.getElementById('project-modal').addEventListener('click', function(e) {
-            if (e.target.id === 'project-modal') {
-                closeModal();
-            }
+      <!-- animated soft background shapes -->
+      <svg class="absolute right-0 top-12 opacity-10 w-72" viewBox="0 0 200 200">
+        <defs><linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#C8A87A"/><stop offset="1" stop-color="#F3EAD9"/></linearGradient></defs>
+        <circle cx="100" cy="100" r="100" fill="url(#g1)"></circle>
+      </svg>
+    </section>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-12">
+
+      <!-- ABOUT -->
+      <section id="about" class="py-20">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+          <div data-aos="fade-right" data-aos-delay="100">
+            <h2 class="heading text-3xl md:text-4xl font-bold mb-6"><span class="text-slate-200 mr-4">01.</span> About Me</h2>
+            <p class="text-gray-700 leading-relaxed mb-4">I’m <strong>Saransh</strong>, a B.Tech CSE student who blends product-focused design with solid engineering. I love building mobile experiences in Android (Kotlin) and shaping interfaces with Figma. I’m currently deepening my knowledge in Data Science and ML fundamentals while shipping production-level apps.</p>
+            <p class="text-gray-700 mb-6">I’m also an organizer at <strong>Pehchaan – The Street School</strong>, running drawing & tutoring sessions and mental-health-focused activities for children in Delhi — I believe tech skills scale impact when combined with empathy.</p>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div class="p-4 bg-white rounded-2xl border border-gray-100 premium-card-shadow">
+                <div class="text-sm text-gray-500">Location</div>
+                <div class="font-medium">Delhi, India</div>
+              </div>
+              <div class="p-4 bg-white rounded-2xl border border-gray-100 premium-card-shadow">
+                <div class="text-sm text-gray-500">Availability</div>
+                <div class="font-medium">Open to internships & collaborations</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-8 rounded-3xl bg-slate-50 premium-card-shadow" data-aos="fade-left" data-aos-delay="150">
+            <h3 class="heading text-xl font-bold mb-4 accent-text">My Toolbox</h3>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="p-4 bg-white rounded-xl border border-gray-100">
+                <div class="text-xs text-gray-500">Languages</div>
+                <div class="font-medium">C, C++, Java, Python, JavaScript, Kotlin</div>
+              </div>
+              <div class="p-4 bg-white rounded-xl border border-gray-100">
+                <div class="text-xs text-gray-500">Frameworks</div>
+                <div class="font-medium">Android (Kotlin), HTML, CSS</div>
+              </div>
+              <div class="p-4 bg-white rounded-xl border border-gray-100">
+                <div class="text-xs text-gray-500">Tools</div>
+                <div class="font-medium">Figma, Android Studio, Supabase, Git</div>
+              </div>
+              <div class="p-4 bg-white rounded-xl border border-gray-100">
+                <div class="text-xs text-gray-500">Data</div>
+                <div class="font-medium">Pandas, scikit-learn, NumPy</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="w-full h-px bg-gray-100 my-16"></div>
+
+      <!-- PROJECTS -->
+      <section id="projects" class="py-10">
+        <h2 class="heading text-3xl md:text-4xl font-bold mb-8"><span class="text-slate-200 mr-4">02.</span> Featured Projects</h2>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- StudyBuddy -->
+          <article class="rounded-2xl overflow-hidden premium-card-shadow bg-white tilt" data-aos="fade-up" data-aos-delay="100" onclick="openModal('StudyBuddy')">
+            <div class="aspect-video overflow-hidden">
+              <img src="https://placehold.co/900x600/1E40AF/FFFFFF?text=StudyBuddy" alt="" class="w-full h-full object-cover transform transition duration-500 group-hover:scale-105">
+            </div>
+            <div class="p-6">
+              <h3 class="heading text-xl font-bold mb-1">StudyBuddy – Android App</h3>
+              <p class="text-sm font-medium accent-text mb-3">Kotlin • Supabase • MPAndroidChart</p>
+              <p class="text-gray-600 text-sm">Task management, Pomodoro, analytics dashboard, voice & file uploads — built with an emphasis on UX and performance.</p>
+            </div>
+          </article>
+
+          <!-- Brew Haven -->
+          <article class="rounded-2xl overflow-hidden premium-card-shadow bg-white tilt" data-aos="fade-up" data-aos-delay="160" onclick="openModal('BrewHaven')">
+            <div class="aspect-video overflow-hidden">
+              <img src="https://placehold.co/900x600/92400E/FFFFFF?text=Brew+Haven" alt="" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+              <h3 class="heading text-xl font-bold mb-1">Brew Haven – Coffee Site</h3>
+              <p class="text-sm font-medium accent-text mb-3">HTML • CSS • JS</p>
+              <p class="text-gray-600 text-sm">2-page marketing website with a lightweight chatbot and smooth UI/UX for conversions.</p>
+            </div>
+          </article>
+
+          <!-- ADAS -->
+          <article class="rounded-2xl overflow-hidden premium-card-shadow bg-white tilt" data-aos="fade-up" data-aos-delay="220" onclick="openModal('ADAS')">
+            <div class="aspect-video overflow-hidden">
+              <img src="https://placehold.co/900x600/15803D/FFFFFF?text=ADAS" alt="" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+              <h3 class="heading text-xl font-bold mb-1">ADAS Data Visualization</h3>
+              <p class="text-sm font-medium accent-text mb-3">Data Viz • Python</p>
+              <p class="text-gray-600 text-sm">Pipeline & visualization proof-of-concept for tree detection and sensor diagnostics.</p>
+            </div>
+          </article>
+
+          <!-- Chatbots -->
+          <article class="rounded-2xl overflow-hidden premium-card-shadow bg-white tilt" data-aos="fade-up" data-aos-delay="280" onclick="openModal('Chatbots')">
+            <div class="aspect-video overflow-hidden">
+              <img src="https://placehold.co/900x600/7C3AED/FFFFFF?text=Chatbots" alt="" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+              <h3 class="heading text-xl font-bold mb-1">AI Chatbots</h3>
+              <p class="text-sm font-medium accent-text mb-3">Flask • Gemini API • Flutter</p>
+              <p class="text-gray-600 text-sm">Cross-platform conversational AI prototypes for web, mobile, and desktop.</p>
+            </div>
+          </article>
+
+          <!-- ML Mini Projects -->
+          <article class="rounded-2xl overflow-hidden premium-card-shadow bg-white tilt" data-aos="fade-up" data-aos-delay="340" onclick="openModal('ML')">
+            <div class="aspect-video overflow-hidden">
+              <img src="https://placehold.co/900x600/DC2626/FFFFFF?text=Machine+Learning" alt="" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+              <h3 class="heading text-xl font-bold mb-1">Machine Learning Projects</h3>
+              <p class="text-sm font-medium accent-text mb-3">scikit-learn • Pandas</p>
+              <p class="text-gray-600 text-sm">Regression & classification tasks: housing, wine quality, and cancer detection examples.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <div class="w-full h-px bg-gray-100 my-16"></div>
+
+      <!-- EXPERIENCE & TIMELINE -->
+      <section id="experience" class="py-10 relative">
+        <h2 class="heading text-3xl md:text-4xl font-bold mb-10"><span class="text-slate-200 mr-4">03.</span> Experience & Education</h2>
+
+        <div class="relative timeline-container">
+          <div class="timeline-line hidden md:block"></div>
+
+          <div class="space-y-12">
+            <!-- Internship -->
+            <div class="grid md:grid-cols-2 gap-6 items-start">
+              <div class="md:col-span-1 md:pr-12 md:text-right" data-aos="fade-right" data-aos-delay="100">
+                <div class="inline-block p-6 rounded-2xl bg-white premium-card-shadow text-left md:text-right">
+                  <div class="text-sm text-amber-600 font-semibold">Q3 2023 - Present</div>
+                  <h3 class="heading text-xl font-bold mt-2">Android Development Intern</h3>
+                  <p class="text-gray-600 mt-2">Built production apps using Kotlin, MVVM, integrated Supabase and MPAndroidChart for analytics.</p>
+                </div>
+              </div>
+              <div class="md:col-span-1"></div>
+            </div>
+
+            <!-- NGO -->
+            <div class="grid md:grid-cols-2 gap-6 items-start">
+              <div></div>
+              <div class="md:col-span-1 md:pl-12" data-aos="fade-left" data-aos-delay="200">
+                <div class="p-6 rounded-2xl bg-white premium-card-shadow">
+                  <div class="text-sm text-amber-600 font-semibold">2022 - Present</div>
+                  <h3 class="heading text-xl font-bold mt-2">Organizer — Pehchaan</h3>
+                  <p class="text-gray-600 mt-2">Conduct free drawing, tutoring & mental health activities for children in Delhi. Focused on community impact and education.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Education -->
+            <div class="grid md:grid-cols-2 gap-6 items-start">
+              <div class="md:col-span-1 md:pr-12 md:text-right" data-aos="fade-right" data-aos-delay="300">
+                <div class="p-6 rounded-2xl bg-white border-2 accent-text/20">
+                  <div class="text-sm text-amber-600 font-semibold">2021 - Ongoing</div>
+                  <h3 class="heading text-xl font-bold mt-2">B.Tech — Computer Science Engineering</h3>
+                  <p class="text-gray-600 mt-2">3rd Year, minor/specialization in Data Science.</p>
+                </div>
+              </div>
+              <div class="md:col-span-1"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="w-full h-px bg-gray-100 my-16"></div>
+
+      <!-- CERTIFICATIONS -->
+      <section id="certifications" class="py-10">
+        <h2 class="heading text-3xl md:text-4xl font-bold mb-8"><span class="text-slate-200 mr-4">04.</span> Certifications</h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          <div class="p-6 bg-white rounded-2xl premium-card-shadow flex items-start gap-4" data-aos="fade-up">
+            <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none"><path d="M12 2l3 6 6 .5-4.5 3.5L18 20l-6-3-6 3 .5-7L2 8.5 8 8 12 2z" fill="url(#g1)"/></svg>
+            <div><div class="font-semibold">Android Development Course</div><div class="text-sm text-gray-500">Kotlin & MVVM</div></div>
+          </div>
+          <div class="p-6 bg-white rounded-2xl premium-card-shadow flex items-start gap-4" data-aos="fade-up" data-aos-delay="80">
+            <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none"><path d="M12 2l3 6 6 .5-4.5 3.5L18 20l-6-3-6 3 .5-7L2 8.5 8 8 12 2z" fill="url(#g1)"/></svg>
+            <div><div class="font-semibold">NGO Internship Completion</div><div class="text-sm text-gray-500">Sanatan Pratibha Foundation</div></div>
+          </div>
+          <div class="p-6 bg-white rounded-2xl premium-card-shadow flex items-start gap-4" data-aos="fade-up" data-aos-delay="160">
+            <svg class="h-8 w-8" viewBox="0 0 24 24" fill="none"><path d="M12 2l3 6 6 .5-4.5 3.5L18 20l-6-3-6 3 .5-7L2 8.5 8 8 12 2z" fill="url(#g1)"/></svg>
+            <div><div class="font-semibold">Data Science & AI</div><div class="text-sm text-gray-500">Foundational ML & Python</div></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="w-full h-px bg-gray-100 my-16"></div>
+
+      <!-- CONTACT -->
+      <section id="contact" class="py-16 max-w-3xl mx-auto">
+        <h2 class="heading text-3xl md:text-4xl font-bold text-center mb-6"><span class="text-slate-200 mr-4">05.</span> Get In Touch</h2>
+        <p class="text-center text-gray-600 mb-8">Open to internships, freelance projects, and collaborations. Let’s build something meaningful.</p>
+
+        <form id="contact-form" class="space-y-4 p-8 rounded-3xl bg-slate-50 premium-card-shadow" novalidate>
+          <div class="grid md:grid-cols-2 gap-4">
+            <input id="name" type="text" placeholder="Your name" required class="p-4 rounded-xl border border-gray-200 bg-white">
+            <input id="email" type="email" placeholder="Your email" required class="p-4 rounded-xl border border-gray-200 bg-white">
+          </div>
+          <input id="subject" type="text" placeholder="Subject" class="p-4 rounded-xl border border-gray-200 bg-white">
+          <textarea id="message" rows="5" placeholder="Message" required class="p-4 rounded-xl border border-gray-200 bg-white"></textarea>
+
+          <div class="flex items-center justify-between">
+            <button type="submit" class="inline-flex items-center gap-3 px-6 py-3 rounded-2xl text-white font-semibold" style="background:var(--accent);">
+              Send Message
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M3 10v11h18V10M21 3L3 10l9 4 9-4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+              </svg>
+            </button>
+            <div class="text-sm text-gray-500">Or email: <a href="mailto:saransh.cs@email.com" class="accent-text">saransh.cs@email.com</a></div>
+          </div>
+
+          <div id="form-success" class="hidden mt-4 p-4 rounded-lg bg-green-50 text-green-700 font-medium">Thanks! Your message was sent (demo).</div>
+        </form>
+
+        <div class="flex items-center justify-center gap-6 mt-8">
+          <a href="https://github.com/saransh" target="_blank" class="text-gray-500 hover:text-gray-900"><i data-lucide="github" class="w-6 h-6"></i></a>
+          <a href="https://linkedin.com/in/saransh" target="_blank" class="text-gray-500 hover:text-blue-700"><i data-lucide="linkedin" class="w-6 h-6"></i></a>
+          <a href="mailto:saransh.cs@email.com" class="text-gray-500 hover:accent-text"><i data-lucide="mail" class="w-6 h-6"></i></a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="py-8 text-center text-sm text-gray-500 border-t border-gray-100">
+    Designed & Built by Saransh • © <span id="year"></span>
+  </footer>
+
+  <!-- PROJECT MODAL -->
+  <div id="project-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-6">
+    <div id="modal-card" class="bg-white rounded-3xl max-w-3xl w-full p-8 premium-card-shadow transform scale-95 opacity-0">
+      <div class="flex justify-between items-start">
+        <div>
+          <h3 id="modal-title" class="heading text-2xl font-bold accent-text">Project</h3>
+          <p id="modal-tech" class="text-sm text-gray-500 mt-1">Stack</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <a id="modal-github" href="#" target="_blank" class="text-gray-500 hover:text-gray-900" title="View repo"><i data-lucide="github" class="w-6 h-6"></i></a>
+          <button id="modal-close" class="text-gray-600 hover:text-gray-900"><i data-lucide="x" class="w-6 h-6"></i></button>
+        </div>
+      </div>
+
+      <p id="modal-desc" class="text-gray-700 mt-4"></p>
+
+      <h4 class="font-semibold mt-6 mb-2">Features</h4>
+      <ul id="modal-features" class="list-disc list-inside text-gray-600"></ul>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script>
+    // Initialize AOS
+    document.addEventListener('DOMContentLoaded', function () {
+      AOS.init({ duration: 700, once: true, offset: 120 });
+      lucide.createIcons();
+      document.getElementById('year').textContent = new Date().getFullYear();
+    });
+
+    // Mobile menu
+    const menuBtn = document.getElementById('menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuBtn?.addEventListener('click', () => {
+      const expanded = menuBtn.getAttribute('aria-expanded') === 'true';
+      menuBtn.setAttribute('aria-expanded', (!expanded).toString());
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // GSAP animations (defer until GSAP loaded)
+    window.addEventListener('load', () => {
+      if (window.gsap) {
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Hero text reveal
+        gsap.fromTo('#hero-line1 span, #hero-line1', { y: 80 }, { y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.05 });
+        gsap.fromTo('#hero-name', { y: 90, opacity: 0 }, { y: 0, opacity: 1, duration: 1.1, delay: 0.25, ease: 'power3.out' });
+
+        // parallax hero card
+        gsap.to('#hero-card', {
+          y: -18,
+          ease: 'none',
+          scrollTrigger: { trigger: '#home', start: 'top top', end: 'bottom top', scrub: 0.8 }
         });
-    </script>
+
+        // counters
+        document.querySelectorAll('[data-counter]').forEach(el => {
+          const end = parseInt(el.getAttribute('data-counter'), 10) || 0;
+          gsap.fromTo(el, { innerText: 0 }, {
+            innerText: end,
+            duration: 1.6,
+            ease: 'power1.out',
+            snap: { innerText: 1 },
+            scrollTrigger: { trigger: el, start: 'top 80%' }
+          });
+        });
+
+        // floating tilt interaction
+        const tiltElem = document.querySelectorAll('[data-tilt]');
+        tiltElem.forEach(node => {
+          node.addEventListener('mousemove', (e) => {
+            const rect = node.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            const rx = (-y * 6).toFixed(2);
+            const ry = (x * 8).toFixed(2);
+            node.style.transform = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0)`;
+          });
+          node.addEventListener('mouseleave', () => node.style.transform = 'perspective(700px) rotateX(0deg) rotateY(0deg)');
+        });
+
+        // modal open animation
+        gsap.set('#modal-card', { scale: 0.96, opacity: 0 });
+      }
+    });
+
+    // Simple tilt on hover (fallback)
+    document.querySelectorAll('.tilt').forEach(el=>{
+      el.addEventListener('mousemove', (e)=> {
+        const rect = el.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        el.style.transform = `perspective(700px) rotateX(${(-y*5)}deg) rotateY(${(x*5)}deg)`;
+      });
+      el.addEventListener('mouseleave', ()=> el.style.transform = '');
+    });
+
+    // Project data (same as you had, but with repo placeholders)
+    const projectData = {
+      StudyBuddy: {
+        title: 'StudyBuddy – Android App',
+        tech: 'Kotlin, XML, Supabase, MPAndroidChart',
+        description: 'A mobile app for students: task management, Pomodoro, analytics, voice notes & PDF uploads, with focus on smooth UX and performance.',
+        features: ['Auth (Email/Google/GitHub) via Supabase', 'Task manager with local notifications', 'Pomodoro timer', 'Analytics dashboard (MPAndroidChart)', 'Voice note & PDF uploads', 'Material-inspired animations'],
+        repo: '#'
+      },
+      BrewHaven: {
+        title: 'Brew Haven – Coffee Website',
+        tech: 'HTML, CSS, JavaScript',
+        description: '2-page marketing website for a premium cafe, including a lightweight chatbot and conversion-focused UI.',
+        features: ['Home & Contact pages', 'Custom chatbot (JS)', 'Responsive animations & micro-interactions'],
+        repo: '#'
+      },
+      ADAS: {
+        title: 'ADAS Data Visualization',
+        tech: 'Python, Data Visualization',
+        description: 'Proof-of-concept for ADAS pipeline and tree-detection visualization using simulated sensor data.',
+        features: ['Tree detection concept (no heavy DL)', 'Sensor & pipeline visualization', 'Interactive charts for diagnostics'],
+        repo: '#'
+      },
+      Chatbots: {
+        title: 'AI Chatbots',
+        tech: 'Flask, Gemini API, Flutter',
+        description: 'Cross-platform chatbots: website (Flask), Android (Flutter), and desktop demo (Python GUI).',
+        features: ['Flask backend + Gemini API', 'Flutter mobile UI', 'Python GUI desktop demo'],
+        repo: '#'
+      },
+      ML: {
+        title: 'Machine Learning Projects',
+        tech: 'scikit-learn, Pandas, NumPy',
+        description: 'Foundational ML experiments: Regression & Classification tasks with preprocessing and model evaluation.',
+        features: ['California housing regression', 'Wine quality classification', 'Lung cancer classification (Logistic & KNN)'],
+        repo: '#'
+      }
+    };
+
+    // modal open/close
+    const modal = document.getElementById('project-modal');
+    const modalCard = document.getElementById('modal-card');
+    function openModal(key){
+      const d = projectData[key];
+      if(!d) return;
+      document.getElementById('modal-title').textContent = d.title;
+      document.getElementById('modal-tech').textContent = d.tech;
+      document.getElementById('modal-desc').textContent = d.description;
+      const ul = document.getElementById('modal-features');
+      ul.innerHTML = '';
+      d.features.forEach(f=> {
+        const li = document.createElement('li'); li.textContent = f; ul.appendChild(li);
+      });
+      document.getElementById('modal-github').href = d.repo || '#';
+      modal.classList.remove('hidden');
+      document.body.classList.add('modal-open');
+      if(window.gsap) { gsap.to('#modal-card', { scale:1, opacity:1, duration:0.4, ease:'power3.out' }); }
+      else { modalCard.style.opacity = 1; modalCard.style.transform = 'scale(1)'; }
+    }
+    document.getElementById('modal-close').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e)=> { if(e.target === modal) closeModal(); });
+
+    function closeModal(){
+      if(window.gsap){ gsap.to('#modal-card', { scale:0.96, opacity:0, duration:0.25, ease:'power3.in', onComplete: ()=> { modal.classList.add('hidden'); document.body.classList.remove('modal-open'); }}); }
+      else { modal.classList.add('hidden'); document.body.classList.remove('modal-open'); }
+    }
+
+    // contact form (demo validation & success)
+    document.getElementById('contact-form').addEventListener('submit', function(e){
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const message = document.getElementById('message').value.trim();
+      if(!name || !email || !message){
+        alert('Please fill required fields (Name, Email, Message).');
+        return;
+      }
+      // demo success animation
+      const success = document.getElementById('form-success');
+      success.classList.remove('hidden');
+      success.classList.add('animate-fade-in');
+      setTimeout(()=> success.classList.add('hidden'), 4000);
+      this.reset();
+    });
+
+    // tiny A11y: keyboard close for modal
+    document.addEventListener('keydown', (e)=> {
+      if(e.key === 'Escape') {
+        if(!document.getElementById('project-modal').classList.contains('hidden')) closeModal();
+      }
+    });
+
+    // small Intersection observer to change nav style on scroll
+    const nav = document.getElementById('navbar');
+    const hero = document.getElementById('home');
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(entry=>{
+        if(!entry.isIntersecting){ nav.classList.add('bg-white/80','backdrop-blur-md','shadow-sm'); }
+        else { nav.classList.remove('bg-white/80','backdrop-blur-md','shadow-sm'); }
+      });
+    }, { root: null, threshold: 0.05 });
+    obs.observe(hero);
+  </script>
+
+  <!-- AOS JS (deferred) -->
+  <script>
+    // loaded in DOMContentLoaded above via AOS.init()
+  </script>
 </body>
 </html>
