@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saransh | CS Engineer, UI/UX, Android Dev</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Custom font loading (Assuming Satoshi and Inter are available via custom load or fallback) */
+        /* For this demonstration, we'll use a local fallback to maintain consistency with the prompt */
+        :root {
+            --font-heading: 'Poppins', 'Satoshi', 'Inter', sans-serif;
+            --font-body: 'DM Sans', 'Inter', sans-serif;
+            --color-accent: #C8A87A;
+            --color-text: #1A1A1A;
+            --color-subtle-gray: #F0F0F0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-text);
+            background-color: #FFFFFF; /* Pure White background */
+        }
+
+        .heading-font {
+            font-family: var(--font-heading);
+            letter-spacing: -0.04em;
+        }
+
+        /* Subtle Neumorphism-lite card shadow */
+        .premium-card-shadow {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .premium-card-shadow:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06), 0 3px 6px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Accent color utility */
+        .accent-bg { background-color: var(--color-accent); }
+        .accent-text { color: var(--color-accent); }
+        .accent-border { border-color: var(--color-accent); }
+
+        /* Timeline style */
+        .timeline-container {
+            position: relative;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            width: 2px;
+            background-color: var(--color-subtle-gray);
+            top: 0;
+            bottom: 0;
+            transform: translateX(-50%);
+        }
+
+        @media (max-width: 768px) {
+            .timeline-line {
+                left: 20px;
+                transform: none;
+            }
+            .timeline-item-left, .timeline-item-right {
+                margin-left: 40px;
+                width: calc(100% - 40px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar (Sticky, Hidden until scroll) -->
+    <header id="navbar" class="fixed top-0 left-0 w-full z-50 bg-white/80 backdrop-blur-md opacity-0 transition-opacity duration-500 shadow-sm border-b border-gray-100 hidden md:block">
+        <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <span class="heading-font text-lg font-bold accent-text">SARANSH</span>
+            <div class="flex space-x-8 text-sm font-medium">
+                <a href="#home" class="hover:text-amber-700 transition duration-200">Home</a>
+                <a href="#about" class="hover:text-amber-700 transition duration-200">About</a>
+                <a href="#skills" class="hover:text-amber-700 transition duration-200">Skills</a>
+                <a href="#projects" class="hover:text-amber-700 transition duration-200">Projects</a>
+                <a href="#contact" class="hover:text-amber-700 transition duration-200">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="text-lg">
+        
+        <!-- 1. HERO SECTION -->
+        <section id="home" class="h-screen flex items-center justify-center p-6 md:p-12 text-center max-w-5xl mx-auto">
+            <div class="space-y-8">
+                <!-- Profile Image Placeholder -->
+                <div class="w-32 h-32 mx-auto rounded-full p-1" style="border: 4px solid var(--color-accent); background: linear-gradient(135deg, var(--color-subtle-gray), var(--color-accent) 80%);">
+                    <img src="https://placehold.co/120x120/F5F5F5/C8A87A?text=S" alt="Saransh Profile" class="w-full h-full object-cover rounded-full">
+                </div>
+
+                <h1 class="heading-font text-5xl md:text-7xl font-extrabold text-gray-900 leading-tight">
+                    Hello, I'm <span class="accent-text">SARANSH</span>.
+                </h1>
+
+                <p class="text-xl md:text-2xl font-light text-slate-600 max-w-3xl mx-auto">
+                    CS Engineer | Android Dev | UI/UX | Data Science Enthusiast
+                </p>
+
+                <p class="text-base md:text-lg text-gray-700 max-w-4xl mx-auto">
+                    A problem-solving B.Tech student building clean user interfaces and efficient systems through code and design thinking.
+                </p>
+
+                <div class="flex justify-center space-x-6 pt-4">
+                    <a href="#projects" class="py-3 px-8 text-white font-semibold rounded-2xl accent-bg premium-card-shadow hover:opacity-90 transition duration-300 flex items-center space-x-2">
+                        <span>View Projects</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#" class="py-3 px-8 text-gray-700 font-semibold rounded-2xl border-2 accent-border bg-white hover:bg-gray-50 transition duration-300 premium-card-shadow flex items-center space-x-2">
+                        <span>Download Resume</span>
+                        <i data-lucide="download" class="w-5 h-5"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <div class="max-w-7xl mx-auto px-6 md:px-12">
+
+            <!-- Section Divider -->
+            <div class="w-full h-px my-24 bg-gray-100"></div>
+
+            <!-- 2. ABOUT ME SECTION -->
+            <section id="about" class="py-16 md:py-24">
+                <h2 class="heading-font text-3xl md:text-5xl font-bold mb-16">
+                    <span class="text-slate-200 mr-4">01.</span> About Me
+                </h2>
+                
+                <div class="grid md:grid-cols-2 gap-16 items-center">
+                    <div class="space-y-6 text-gray-700">
+                        <p>
+                            I am Saransh, currently pursuing a B.Tech in Computer Science Engineering. My passion lies at the intersection of creation and efficiency, blending a deep love for clean code with elegant user experience (UI/UX). I thrive on turning complex problems into simple, functional solutions.
+                        </p>
+                        <p>
+                            While I focus academically on **Data Science and AI/ML**, I actively develop cross-platform solutions, primarily in **Android (Kotlin)**, and obsess over design tools like **Figma**. I am a **fast-learner** and value **responsibility** and **teamwork** highly.
+                        </p>
+                        <div class="p-6 rounded-2xl bg-slate-50 border border-gray-100">
+                            <h3 class="font-semibold text-xl mb-3 flex items-center accent-text">
+                                <i data-lucide="heart" class="w-5 h-5 mr-2 fill-current"></i> NGO Work
+                            </h3>
+                            <p class="text-base">
+                                Organizer at **Pehchaan – The Street School**, where I conduct drawing, tutoring, and mental health activities for children in Delhi. A core belief in using skills for social good.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="p-8 rounded-3xl bg-slate-50 premium-card-shadow">
+                        <h3 class="heading-font text-2xl font-bold mb-4">My Focus Areas</h3>
+                        <ul class="space-y-3 list-none text-gray-700">
+                            <li class="flex items-center"><i data-lucide="smartphone" class="w-5 h-5 mr-3 accent-text"></i> Android Development (Kotlin)</li>
+                            <li class="flex items-center"><i data-lucide="palette" class="w-5 h-5 mr-3 accent-text"></i> UI/UX Design & Figma</li>
+                            <li class="flex items-center"><i data-lucide="bar-chart-3" class="w-5 h-5 mr-3 accent-text"></i> Data Science & AI/ML Learning</li>
+                            <li class="flex items-center"><i data-lucide="git-branch" class="w-5 h-5 mr-3 accent-text"></i> Web Development (Foundations)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section Divider -->
+            <div class="w-full h-px my-24 bg-gray-100"></div>
+
+            <!-- 3. SKILLS SECTION -->
+            <section id="skills" class="py-16 md:py-24">
+                <h2 class="heading-font text-3xl md:text-5xl font-bold mb-16">
+                    <span class="text-slate-200 mr-4">02.</span> Skills & Tech Stack
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    
+                    <!-- Languages -->
+                    <div class="p-8 rounded-2xl bg-white border border-gray-100 premium-card-shadow">
+                        <i data-lucide="code-square" class="w-8 h-8 accent-text mb-4"></i>
+                        <h3 class="heading-font text-xl font-bold mb-4">Languages</h3>
+                        <p class="text-base text-gray-600">C, C++, Java, Python, JavaScript, Kotlin, XML</p>
+                    </div>
+
+                    <!-- Frameworks / Libraries -->
+                    <div class="p-8 rounded-2xl bg-white border border-gray-100 premium-card-shadow">
+                        <i data-lucide="layers-3" class="w-8 h-8 accent-text mb-4"></i>
+                        <h3 class="heading-font text-xl font-bold mb-4">Frameworks / Libraries</h3>
+                        <p class="text-base text-gray-600">HTML, CSS, MPAndroidChart (Android)</p>
+                    </div>
+
+                    <!-- Tools / Platforms -->
+                    <div class="p-8 rounded-2xl bg-white border border-gray-100 premium-card-shadow">
+                        <i data-lucide="tool" class="w-8 h-8 accent-text mb-4"></i>
+                        <h3 class="heading-font text-xl font-bold mb-4">Tools / Platforms</h3>
+                        <p class="text-base text-gray-600">Figma (UI/UX), MySQL, DBMS, Android Studio, Supabase, Git/GitHub</p>
+                    </div>
+
+                    <!-- Soft Skills -->
+                    <div class="p-8 rounded-2xl bg-white border border-gray-100 premium-card-shadow">
+                        <i data-lucide="users-2" class="w-8 h-8 accent-text mb-4"></i>
+                        <h3 class="heading-font text-xl font-bold mb-4">Soft Skills</h3>
+                        <p class="text-base text-gray-600">Problem-Solving, Teamwork, Communication, UI/UX Thinking</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section Divider -->
+            <div class="w-full h-px my-24 bg-gray-100"></div>
+
+            <!-- 4. PROJECTS SECTION -->
+            <section id="projects" class="py-16 md:py-24">
+                <h2 class="heading-font text-3xl md:text-5xl font-bold mb-16">
+                    <span class="text-slate-200 mr-4">03.</span> Featured Projects
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    
+                    <!-- Project Card 1: StudyBuddy -->
+                    <div class="rounded-2xl bg-white premium-card-shadow overflow-hidden group cursor-pointer" onclick="openModal('StudyBuddy')">
+                        <div class="aspect-video overflow-hidden">
+                            <img src="https://placehold.co/600x400/1E40AF/FFFFFF?text=StudyBuddy+App" alt="StudyBuddy App Mockup" class="w-full h-full object-cover transform transition duration-500 group-hover:scale-105">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="heading-font text-2xl font-bold mb-1">StudyBuddy – Android App</h3>
+                            <p class="text-sm accent-text font-medium mb-3">Kotlin, XML, Supabase, MPAndroidChart</p>
+                            <p class="text-base text-gray-600">A robust task management and study tracker app with rich features like Pomodoro, authentication, and analytics dashboard.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Project Card 2: Brew Haven -->
+                    <div class="rounded-2xl bg-white premium-card-shadow overflow-hidden group cursor-pointer" onclick="openModal('BrewHaven')">
+                        <div class="aspect-video overflow-hidden">
+                            <img src="https://placehold.co/600x400/92400E/FFFFFF?text=Brew+Haven+Website" alt="Brew Haven Website Mockup" class="w-full h-full object-cover transform transition duration-500 group-hover:scale-105">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="heading-font text-2xl font-bold mb-1">Brew Haven – Coffee Café</h3>
+                            <p class="text-sm accent-text font-medium mb-3">HTML, CSS, JavaScript</p>
+                            <p class="text-base text-gray-600">Modern, 2-page website with smooth UI/UX and a simple built-in chatbot for customer interaction.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Project Card 3: ADAS Model -->
+                    <div class="rounded-2xl bg-white premium-card-shadow overflow-hidden group cursor-pointer" onclick="openModal('ADAS')">
+                        <div class="aspect-video overflow-hidden">
+                            <img src="https://placehold.co/600x400/15803D/FFFFFF?text=ADAS+Data+Viz" alt="ADAS Data Visualization Mockup" class="w-full h-full object-cover transform transition duration-500 group-hover:scale-105">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="heading-font text-2xl font-bold mb-1">ADAS Data Visualization</h3>
+                            <p class="text-sm accent-text font-medium mb-3">Data Visualization Techniques</p>
+                            <p class="text-base text-gray-600">A proof-of-concept project demonstrating the workflow of an ADAS system using tree detection and visualization.</p>
+                        </div>
+                    </div>
+
+                    <!-- Project Card 4: AI Chatbots Group -->
+                    <div class="rounded-2xl bg-white premium-card-shadow overflow-hidden group cursor-pointer" onclick="openModal('Chatbots')">
+                        <div class="aspect-video overflow-hidden">
+                            <img src="https://placehold.co/600x400/7C3AED/FFFFFF?text=AI+Chatbot+Projects" alt="AI Chatbot Projects Mockup" class="w-full h-full object-cover transform transition duration-500 group-hover:scale-105">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="heading-font text-2xl font-bold mb-1">AI Chatbots (Multiple)</h3>
+                            <p class="text-sm accent-text font-medium mb-3">Flask, Gemini API, Flutter, Python GUI</p>
+                            <p class="text-base text-gray-600">Implementation of intelligent chatbots across multiple platforms (Web, Android, Windows) using the Gemini API.</p>
+                        </div>
+                    </div>
+
+                     <!-- Project Card 5: ML Mini Projects -->
+                    <div class="rounded-2xl bg-white premium-card-shadow overflow-hidden group cursor-pointer" onclick="openModal('ML')">
+                        <div class="aspect-video overflow-hidden">
+                            <img src="https://placehold.co/600x400/DC2626/FFFFFF?text=ML+Mini+Projects" alt="ML Mini Projects Mockup" class="w-full h-full object-cover transform transition duration-500 group-hover:scale-105">
+                        </div>
+                        <div class="p-6">
+                            <h3 class="heading-font text-2xl font-bold mb-1">Machine Learning Projects</h3>
+                            <p class="text-sm accent-text font-medium mb-3">Python, Scikit-learn, Pandas</p>
+                            <p class="text-base text-gray-600">A collection of foundational ML projects, including Regression (Housing) and Classification (Wine, Cancer).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section Divider -->
+            <div class="w-full h-px my-24 bg-gray-100"></div>
+
+            <!-- 5. EXPERIENCE & EDUCATION SECTION -->
+            <section id="experience" class="py-16 md:py-24">
+                <h2 class="heading-font text-3xl md:text-5xl font-bold mb-16">
+                    <span class="text-slate-200 mr-4">04.</span> Experience & Education
+                </h2>
+
+                <div class="timeline-container relative pt-12">
+                    <div class="timeline-line hidden md:block"></div>
+
+                    <!-- Experience 1: Android Internship -->
+                    <div class="grid md:grid-cols-2 gap-8 mb-16 relative">
+                        <div class="md:col-span-1 timeline-item-left md:pr-12 md:text-right">
+                            <div class="p-6 rounded-2xl bg-slate-50 premium-card-shadow">
+                                <span class="text-sm font-semibold mb-2 block accent-text">Q3 2023 - Present</span>
+                                <h3 class="heading-font text-2xl font-bold mb-2 text-gray-900">Android Development Intern</h3>
+                                <p class="text-base text-gray-600 mb-3">Industry-Oriented Training Program</p>
+                                <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                                    <li>Built production-ready apps using Kotlin, MVVM, and XML.</li>
+                                    <li>Integrated Supabase for Auth, DB, and File Storage.</li>
+                                    <li>Implemented MPAndroidChart for data analytics dashboards.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="hidden md:block absolute w-4 h-4 rounded-full accent-bg top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
+                        <div class="md:col-span-1"></div>
+                    </div>
+                    
+                    <!-- Experience 2: NGO -->
+                    <div class="grid md:grid-cols-2 gap-8 mb-16 relative">
+                        <div class="hidden md:block"></div>
+                        <div class="md:col-span-1 timeline-item-right md:pl-12 md:text-left">
+                            <div class="p-6 rounded-2xl bg-slate-50 premium-card-shadow">
+                                <span class="text-sm font-semibold mb-2 block accent-text">2022 - Present</span>
+                                <h3 class="heading-font text-2xl font-bold mb-2 text-gray-900">Organizer – Pehchaan NGO</h3>
+                                <p class="text-base text-gray-600 mb-3">Pehchaan – The Street School</p>
+                                <ul class="list-disc list-inside text-sm text-gray-700 space-y-1">
+                                    <li>Conducted free drawing classes, academic tutoring, and psychology/mental health sessions.</li>
+                                    <li>Organized educational events and activities for underprivileged children in Delhi.</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="hidden md:block absolute w-4 h-4 rounded-full accent-bg top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
+                    </div>
+                    
+                    <!-- Education -->
+                    <div class="grid md:grid-cols-2 gap-8 relative">
+                        <div class="md:col-span-1 timeline-item-left md:pr-12 md:text-right">
+                            <div class="p-6 rounded-2xl bg-white border-2 accent-border">
+                                <span class="text-sm font-semibold mb-2 block accent-text">2021 - Ongoing</span>
+                                <h3 class="heading-font text-2xl font-bold mb-2 text-gray-900">B.Tech – Computer Science Engineering (CSE)</h3>
+                                <p class="text-base text-gray-600">3rd Year, Specialization/Minor in Data Science</p>
+                            </div>
+                        </div>
+                        <div class="hidden md:block absolute w-4 h-4 rounded-full accent-bg top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"></div>
+                        <div class="md:col-span-1"></div>
+                    </div>
+
+                </div>
+            </section>
+            
+            <!-- Section Divider -->
+            <div class="w-full h-px my-24 bg-gray-100"></div>
+            
+            <!-- 6. CERTIFICATIONS SECTION -->
+            <section id="certifications" class="py-16 md:py-24">
+                <h2 class="heading-font text-3xl md:text-5xl font-bold mb-16">
+                    <span class="text-slate-200 mr-4">05.</span> Certifications
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Cert Card 1: Android Dev -->
+                    <div class="p-6 rounded-2xl bg-white premium-card-shadow flex items-start space-x-4">
+                        <i data-lucide="shield-check" class="w-8 h-8 accent-text flex-shrink-0"></i>
+                        <div>
+                            <h3 class="heading-font text-lg font-bold">Android Development Course</h3>
+                            <p class="text-sm text-gray-600">Comprehensive training in modern Android stack (Kotlin, MVVM).</p>
+                        </div>
+                    </div>
+
+                    <!-- Cert Card 2: NGO Internship -->
+                    <div class="p-6 rounded-2xl bg-white premium-card-shadow flex items-start space-x-4">
+                        <i data-lucide="graduation-cap" class="w-8 h-8 accent-text flex-shrink-0"></i>
+                        <div>
+                            <h3 class="heading-font text-lg font-bold">NGO Internship Completion</h3>
+                            <p class="text-sm text-gray-600">Sanatan Pratibha Foundation - Focused on community welfare and soft skills.</p>
+                        </div>
+                    </div>
+
+                    <!-- Cert Card 3: Data Science -->
+                    <div class="p-6 rounded-2xl bg-white premium-card-shadow flex items-start space-x-4">
+                        <i data-lucide="brain-circuit" class="w-8 h-8 accent-text flex-shrink-0"></i>
+                        <div>
+                            <h3 class="heading-font text-lg font-bold">Data Science & AI Certification</h3>
+                            <p class="text-sm text-gray-600">Foundational knowledge in ML/AI concepts and Python libraries.</p>
+                        </div>
+                    </div>
+
+                    <!-- Cert Card 4: UI/UX Workshop -->
+                    <div class="p-6 rounded-2xl bg-white premium-card-shadow flex items-start space-x-4">
+                        <i data-lucide="layout-grid" class="w-8 h-8 accent-text flex-shrink-0"></i>
+                        <div>
+                            <h3 class="heading-font text-lg font-bold">UI/UX Design Workshop</h3>
+                            <p class="text-sm text-gray-600">Focused training on Figma best practices and design principles.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section Divider -->
+            <div class="w-full h-px my-24 bg-gray-100"></div>
+
+            <!-- 7. CONTACT SECTION -->
+            <section id="contact" class="py-16 md:py-24 max-w-3xl mx-auto">
+                <h2 class="heading-font text-3xl md:text-5xl font-bold mb-16 text-center">
+                    <span class="text-slate-200 mr-4">06.</span> Get In Touch
+                </h2>
+
+                <p class="text-center text-lg text-gray-700 mb-10">
+                    I am always open to new opportunities, collaborations, and conversations about tech, design, or social work.
+                </p>
+
+                <form class="space-y-6 p-8 rounded-3xl bg-slate-50 premium-card-shadow">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <input type="text" placeholder="Your Name" class="w-full p-4 border border-gray-200 rounded-xl bg-white focus:ring-2 accent-border focus:border-accent-text transition duration-300">
+                        <input type="email" placeholder="Your Email" class="w-full p-4 border border-gray-200 rounded-xl bg-white focus:ring-2 accent-border focus:border-accent-text transition duration-300">
+                    </div>
+                    <input type="text" placeholder="Subject" class="w-full p-4 border border-gray-200 rounded-xl bg-white focus:ring-2 accent-border focus:border-accent-text transition duration-300">
+                    <textarea placeholder="Your Message" rows="5" class="w-full p-4 border border-gray-200 rounded-xl bg-white focus:ring-2 accent-border focus:border-accent-text transition duration-300"></textarea>
+                    
+                    <button type="submit" class="w-full py-4 text-white font-semibold rounded-xl accent-bg premium-card-shadow hover:opacity-90 transition duration-300 flex items-center justify-center space-x-2">
+                        <span>Send Message</span>
+                        <i data-lucide="mail" class="w-5 h-5"></i>
+                    </button>
+                </form>
+
+                <!-- Social Links -->
+                <div class="flex justify-center space-x-8 mt-12">
+                    <a href="https://github.com/saransh" target="_blank" class="text-gray-500 hover:text-gray-900 transition duration-300" aria-label="GitHub">
+                        <i data-lucide="github" class="w-8 h-8"></i>
+                    </a>
+                    <a href="https://linkedin.com/in/saransh" target="_blank" class="text-gray-500 hover:text-blue-700 transition duration-300" aria-label="LinkedIn">
+                        <i data-lucide="linkedin" class="w-8 h-8"></i>
+                    </a>
+                    <a href="mailto:saransh.cs@email.com" class="text-gray-500 hover:accent-text transition duration-300" aria-label="Email">
+                        <i data-lucide="mail" class="w-8 h-8"></i>
+                    </a>
+                </div>
+
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-10 border-t border-gray-100 mt-20">
+        <p class="text-sm text-gray-500">
+            Designed & Built by Saransh | &copy; 2024.
+        </p>
+    </footer>
+
+    <!-- Project Modal Placeholder (Hidden by default) -->
+    <div id="project-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-white rounded-3xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-300">
+            <div class="flex justify-end">
+                <button onclick="closeModal()" class="text-gray-600 hover:text-gray-900">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <h3 id="modal-title" class="heading-font text-3xl font-bold mt-4 mb-4 accent-text">Project Title</h3>
+            <p id="modal-tech" class="text-sm font-medium mb-4 text-gray-500"></p>
+            <p id="modal-description" class="text-base text-gray-700 mb-6"></p>
+
+            <h4 class="font-semibold text-xl mb-3 border-b pb-1">Features/Details</h4>
+            <ul id="modal-features" class="list-disc list-inside text-gray-600 space-y-2 text-sm pl-4">
+                <!-- Features will be populated here -->
+            </ul>
+        </div>
+    </div>
+
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // ----------------------------------------------------
+        // JAVASCRIPT FOR UI INTERACTIVITY
+        // ----------------------------------------------------
+
+        // 1. Sticky Navigation Bar Logic
+        window.onscroll = function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.remove('opacity-0', 'hidden');
+                navbar.classList.add('opacity-100');
+            } else {
+                navbar.classList.remove('opacity-100');
+                navbar.classList.add('opacity-0', 'hidden');
+            }
+        };
+
+
+        // 2. Project Data
+        const projectData = {
+            StudyBuddy: {
+                title: 'StudyBuddy – Android App',
+                tech: 'Kotlin, XML, Supabase, MPAndroidChart',
+                description: 'A complete mobile application designed for students, focusing on personalized task management and productivity tracking.',
+                features: [
+                    'Secure Login/Signup (Email, Google, GitHub) using Supabase Auth.',
+                    'Personalized user profiles and settings.',
+                    'Task management with local notifications.',
+                    'Integrated Pomodoro timer for focused study sessions.',
+                    'Analytics dashboard visualizing study time and task completion with MPAndroidChart.',
+                    'Voice note recording and PDF upload functionality.',
+                    'Modern UI with fluid animations following Material Design principles.',
+                ]
+            },
+            BrewHaven: {
+                title: 'Brew Haven – Coffee Café Website',
+                tech: 'HTML, CSS, JavaScript',
+                description: 'A two-page marketing website for a premium coffee shop, prioritizing sleek UI/UX and user interaction.',
+                features: [
+                    'Two distinct pages: Home and Contact.',
+                    'Modern, custom-designed UI/UX with elegant typography and neutral palette.',
+                    'Smooth navigation and scroll interactions.',
+                    'Built-in JavaScript-based chatbot for quick customer inquiries.',
+                ]
+            },
+            ADAS: {
+                title: 'Non-working ADAS Model (Data Visualization)',
+                tech: 'Data Visualization Techniques, Python (Concept)',
+                description: 'A theoretical proof-of-concept project focusing on the data flow and visualization necessary for an Advanced Driver-Assistance System (ADAS).',
+                features: [
+                    'Demonstrates tree detection concept without complex deep learning.',
+                    'Visualizes raw sensor data (simulated) and processed output.',
+                    'Focuses on data pipeline and rendering for quick diagnostic checks.',
+                ]
+            },
+            Chatbots: {
+                title: 'AI Chatbots (Multiple Projects)',
+                tech: 'Flask, Gemini API, Flutter, Python GUI',
+                description: 'A diverse portfolio of projects showcasing integration of the Gemini API for conversational AI across various platforms.',
+                features: [
+                    'Hair Salon Website Chatbot (Python/Flask backend + Gemini API).',
+                    'Android Chatbot App (Flutter frontend + Flask backend).',
+                    'Windows App Chatbot (Simple Python GUI and Flask backend).',
+                    'Focus on robust API handling and quick response times.',
+                ]
+            },
+            ML: {
+                title: 'Machine Learning Mini Projects',
+                tech: 'Python, Scikit-learn, Pandas, NumPy',
+                description: 'A foundation building collection of standard machine learning exercises and models.',
+                features: [
+                    'California Housing Regression: Predicting housing prices using linear and non-linear models.',
+                    'Wine Quality Classification: Classifying wine quality based on physico-chemical features.',
+                    'Lung Cancer Classification: Using Logistic Regression and K-Nearest Neighbors (KNN).',
+                    'Emphasis on data preprocessing, model selection, and evaluation metrics.',
+                ]
+            }
+        };
+
+        // 3. Modal Functions
+        function openModal(projectId) {
+            const data = projectData[projectId];
+            if (!data) return;
+
+            document.getElementById('modal-title').textContent = data.title;
+            document.getElementById('modal-tech').textContent = data.tech;
+            document.getElementById('modal-description').textContent = data.description;
+            
+            const featuresList = document.getElementById('modal-features');
+            featuresList.innerHTML = '';
+            data.features.forEach(feature => {
+                const li = document.createElement('li');
+                li.textContent = feature;
+                featuresList.appendChild(li);
+            });
+
+            const modal = document.getElementById('project-modal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.querySelector('div').classList.remove('scale-95');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('project-modal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modal.querySelector('div').classList.add('scale-95');
+            document.body.style.overflow = ''; // Restore background scrolling
+        }
+
+        // Close modal when clicking outside the content box
+        document.getElementById('project-modal').addEventListener('click', function(e) {
+            if (e.target.id === 'project-modal') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
